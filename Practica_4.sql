@@ -1,12 +1,14 @@
+--Habilitar la salida del servidor.
 SET SERVEROUTPUT ON
 
+--DECLARACION DEL CURSOR EN 2 BLOQUES(Practica 2 parte 2)
 DECLARE
   -- Declarar variables
   v_sueldo NUMBER := &sueldo;
   v_comision NUMBER := &comision;
   v_fecha_actual VARCHAR2(50);
   
-  -- Declarar cursor
+  -- Declarar cursor para el bloque 1
   CURSOR cur_empleados_comision IS
     SELECT 
       UPPER(E.nombre_empleado || ' ' || E.apellidos_empleado) AS nombre_completo,
@@ -22,25 +24,25 @@ BEGIN
   -- Obtener fecha actual
   SELECT TO_CHAR(SYSDATE, 'DD MON YYYY HH24:MI:SS', 'NLS_DATE_LANGUAGE = SPANISH') INTO v_fecha_actual FROM DUAL;
   
-  -- Imprimir resultados de cur_empleados_comision
-  DBMS_OUTPUT.PUT_LINE('Reporte de empleados con sueldo mayor a ' || TO_CHAR(v_sueldo, '$999,999.99') || ' y comisión mayor a ' || TO_CHAR(v_comision, '999,999.99'));
-  DBMS_OUTPUT.PUT_LINE('Fecha de ejecución: ' || v_fecha_actual);
-  DBMS_OUTPUT.PUT_LINE('==================================================================================================================================');
-  DBMS_OUTPUT.PUT_LINE('NOMBRE COMPLETO                                                 FECHA CONTRATACION  TELÉFONO            SUELDO            TOTAL COMISION      NOMBRE DEL GERENTE');
-  DBMS_OUTPUT.PUT_LINE('==================================================================================================================================');
-  
-  FOR emp IN cur_empleados_comision LOOP
-    DBMS_OUTPUT.PUT_LINE(LPAD(emp.nombre_completo, 64, ' ') || 
-                         RPAD(emp.fecha_contratacion, 20, ' ') || 
-                         LPAD(emp.telefono, 21, ' ') || 
-                         RPAD(emp.sueldo, 20, ' ') || 
-                         RPAD(emp.total_comision, 22, ' ') || 
-                         LPAD(emp.nombre_gerente, 32, ' '));
-  END LOOP;
+-- Imprimir resultados de cur_empleados_comision
+DBMS_OUTPUT.PUT_LINE('Reporte de empleados con sueldo mayor a ' || TO_CHAR(v_sueldo, '$999,999.99') || ' y comisión mayor a ' || TO_CHAR(v_comision, '999,999.99'));
+DBMS_OUTPUT.PUT_LINE('Fecha de ejecución: ' || v_fecha_actual);
+DBMS_OUTPUT.PUT_LINE('===========================================================================================================================================');
+    DBMS_OUTPUT.PUT_LINE('        NOMBRE COMPLETO         FECHA CONTRATACION        TELÉFONO           SUELDO          TOTAL COMISION          NOMBRE DEL GERENTE');
+DBMS_OUTPUT.PUT_LINE('===========================================================================================================================================');
+
+FOR emp IN cur_empleados_comision LOOP
+  DBMS_OUTPUT.PUT_LINE(LPAD(emp.nombre_completo, 24, ' ') || 
+                       LPAD(emp.fecha_contratacion, 20, ' ') || 
+                       LPAD(emp.telefono, 23, ' ') || 
+                       LPAD(emp.sueldo, 18, ' ') || 
+                       LPAD(emp.total_comision, 18, ' ') || 
+                       LPAD(emp.nombre_gerente, 32, ' '));
+END LOOP;
 END;
 
 --2do bloque
-
+--habilitar la salida del servidor.
 SET SERVEROUTPUT ON
 
 DECLARE
@@ -59,17 +61,18 @@ BEGIN
   -- Imprimir resultados de cur_empleados_dep
   DBMS_OUTPUT.PUT_LINE('Empleados del departamento "' || v_departamento || '"');
   DBMS_OUTPUT.PUT_LINE('Fecha y hora de ejecución: ' || TO_CHAR(SYSDATE, 'DD-MON-YYYY HH24:MI:SS'));
-  DBMS_OUTPUT.PUT_LINE('====================================================================');
-  DBMS_OUTPUT.PUT_LINE(LPAD('NOMBRE COMPLETO', 64, ' ') || 
-                       LPAD('NOMBRE DEL GERENTE', 64, ' ') || 
-                       LPAD('DEPARTAMENTO', 16, ' '));
-  DBMS_OUTPUT.PUT_LINE('====================================================================');
+  DBMS_OUTPUT.PUT_LINE('======================================================================================================================================================================');
+  DBMS_OUTPUT.PUT_LINE(LPAD('NOMBRE COMPLETO', 40, ' ') || 
+                       LPAD('NOMBRE DEL GERENTE', 40, ' ') || 
+                       LPAD('DEPARTAMENTO', 32, ' '));
+  DBMS_OUTPUT.PUT_LINE('======================================================================================================================================================================');
   FOR emp IN cur_empleados_dep LOOP
-    DBMS_OUTPUT.PUT_LINE(LPAD(emp."NOMBRE COMPLETO", 64, ' ') || 
-                         LPAD(emp."NOMBRE DEL GERENTE", 64, ' ') || 
-                         RPAD(emp."DEPARTAMENTO", 16, ' '));
+    DBMS_OUTPUT.PUT_LINE(LPAD(emp."NOMBRE COMPLETO", 40, ' ') || 
+                         LPAD(emp."NOMBRE DEL GERENTE", 40, ' ') || 
+                         LPAD(emp."DEPARTAMENTO", 30, ' '));
   END LOOP;
 END;
+
 
 
 
